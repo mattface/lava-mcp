@@ -6,7 +6,7 @@ metadata:
     gateway, so an agent/human can run commands against the board. The GATEWAY_*
     and SESSION_* parameters are injected by lava-mcp when it submits the job.
   maintainer:
-    - matthart@qti.qualcomm.com
+    - code@mattface.org
   os:
     - debian
   scope:
@@ -22,4 +22,8 @@ params:
 
 run:
   steps:
+    # LAVA writes job parameters as plain shell vars (not exported) at the top of
+    # run.sh. lava-gateway-connect is a child process, so export them first or it
+    # won't inherit them.
+    - export GATEWAY_HOST GATEWAY_PORT SESSION_ID REVERSE_PORT SESSION_PRIVATE_KEY SESSION_PUBLIC_KEY
     - lava-gateway-connect
